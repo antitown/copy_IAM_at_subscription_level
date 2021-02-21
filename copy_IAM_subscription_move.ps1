@@ -49,17 +49,16 @@ foreach ($e in $export)
  
 
    #write-host $rstype ' ' $rsname ' Signin ' $signinname 
-  <#  if  ($rstype -eq "resourceGroups")
+   if  ($rstype -eq "resourceGroups")
    {
        write-host "New-AzRoleAssignment -SignInName " $signinname "-RoleDefinitName " $Role "-ResourceGroup " $rsname
-    
+       #New-AzRoleAssignment -SignInName $signinname -RoleDefinitName $Role -ResourceGroup $rsname
     }else
     {    
         write-host "New-AzRoleAssignment -SignInName " $signinname "-RoleDefinitName " $Role "-Scope " $str $rstype
+        #New-AzRoleAssignment -SignInName $signinname -RoleDefinitName $Role -Scope $str $rstype
     }
    
-    if  ($rstype -eq "resourceGroups"){
-    write-host $rsname}
-    #>
-    write-host $scope
+   
+    
 }
