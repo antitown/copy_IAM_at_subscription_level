@@ -1,4 +1,5 @@
-﻿$sub_id = "123456789"
+﻿#testing parameters, Value should be ignore
+$sub_id = "123456789"
 $rs_maping = import-csv -path .\rs_mapping.csv
 $export = import-Csv -path .\input.csv
 
@@ -30,7 +31,7 @@ foreach ($e in $export)
   
    foreach ($N in $rs_maping)
    {
-   #write-host ($N | Select -ExpandProperty Org) "=" $rsname
+
         
         if ($rsname -eq ($N | Select -ExpandProperty Org))
         {
@@ -46,22 +47,28 @@ foreach ($e in $export)
    $signinname = ($e | Select -ExpandProperty SignInName)
 
    
-   # get Scope$map 
+   # get Role Definition Nmae 
    $Role = ($e | Select -ExpandProperty RoleDefinitionName)
  
 
-   #write-host $rstype ' ' $rsname ' Signin ' $signinname 
+   #Generating output or execute the assignment
    if  ($rstype -eq "resourceGroups")
    {
        write-host "New-AzRoleAssignment -SignInName " $signinname "-RoleDefinitName " $Role "-ResourceGroup " $rsname
-       if (args[4] -eq "execute") {
-       New-AzRoleAssignment -SignInName $signinname -RoleDefinitName $Role -ResourceGroup $rsname }
+       if ($args.Length -lt 3) 
+       {
+           if($args[3] -eq "execute"){
+           New-AzRoleAssignment -SignInName $signinname -RoleDefinitName $Role -ResourceGroup $rsname }
+        }
     }else
     {    
         
        write-host "New-AzRoleAssignment -SignInName " $signinname "-RoleDefinitName " $Role "-Scope " $str $rstype
-       if (args[4] -eq "execute") {
+       if ($args.Length -lt 3) 
+       {
+           if($args[3] -eq "execute"){
        New-AzRoleAssignment -SignInName $signinname -RoleDefinitName $Role -Scope $str $rstype}
+       }
     } 
     
 }
