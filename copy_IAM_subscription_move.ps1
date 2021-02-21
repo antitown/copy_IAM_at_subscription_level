@@ -7,14 +7,16 @@ if ($args.Count -lt 3)
     write-host "please include the followings as parameters
     1) destination subscription ID
     2) Resource Name mapping CSV
-    3) Export IAM in CSV from the original subscription"
+    3) Export IAM in CSV from the original subscription
+    4) optional - put execute if you wan to the script to execute the command on Azure.
+        *You need to authenticate on Azure with the right privallege"
     exit
  }
 
 
 foreach ($e in $export)
 {
-   #write-host "scope: " ($e | Select -ExpandProperty Scope)
+   
    # get Scope
    $scope = ($e | Select -ExpandProperty Scope)
    $org_sub = $scope.substring(15, 36)
@@ -52,13 +54,14 @@ foreach ($e in $export)
    if  ($rstype -eq "resourceGroups")
    {
        write-host "New-AzRoleAssignment -SignInName " $signinname "-RoleDefinitName " $Role "-ResourceGroup " $rsname
-       #New-AzRoleAssignment -SignInName $signinname -RoleDefinitName $Role -ResourceGroup $rsname
+       if (args[4] -eq "execute") {
+       New-AzRoleAssignment -SignInName $signinname -RoleDefinitName $Role -ResourceGroup $rsname }
     }else
     {    
-        write-host "New-AzRoleAssignment -SignInName " $signinname "-RoleDefinitName " $Role "-Scope " $str $rstype
-        #New-AzRoleAssignment -SignInName $signinname -RoleDefinitName $Role -Scope $str $rstype
-    }
-   
-   
+        
+       write-host "New-AzRoleAssignment -SignInName " $signinname "-RoleDefinitName " $Role "-Scope " $str $rstype
+       if (args[4] -eq "execute") {
+       New-AzRoleAssignment -SignInName $signinname -RoleDefinitName $Role -Scope $str $rstype}
+    } 
     
 }
