@@ -44,30 +44,32 @@ foreach ($e in $export)
    
 
     # get SignInName
-   $signinname = ($e | Select -ExpandProperty SignInName)
+   $signinname = ($e | Select -ExpandProperty SignInName).trim()
 
+    # get SignInName
+   $objectID = ($e | Select -ExpandProperty ObjectID).trim()
    
    # get Role Definition Nmae 
-   $Role = ($e | Select -ExpandProperty RoleDefinitionName)
+   $Role = ($e | Select -ExpandProperty RoleDefinitionName).trim()
  
 
    #Generating output or execute the assignment
    if  ($rstype -eq "resourceGroups")
    {
-       write-host "New-AzRoleAssignment -SignInName " $signinname "-RoleDefinitName " $Role "-ResourceGroup " $rsname
+       write-host "New-AzRoleAssignment  -objectID $objectID -RoleDefinitName ""$Role"" -ResourceGroup $rsname"
        if ($args.Length -lt 3) 
        {
            if($args[3] -eq "execute"){
-           New-AzRoleAssignment -SignInName $signinname -RoleDefinitName $Role -ResourceGroup $rsname }
+           New-AzRoleAssignment  -objectID $objectID -RoleDefinitName $Role -ResourceGroup $rsname }
         }
     }else
     {    
         
-       write-host "New-AzRoleAssignment -SignInName " $signinname "-RoleDefinitName " $Role "-Scope " $str $rstype
+       write-host "New-AzRoleAssignment -objectID $objectID -RoleDefinitName ""$Role"" -Scope $scope"
        if ($args.Length -lt 3) 
        {
            if($args[3] -eq "execute"){
-       New-AzRoleAssignment -SignInName $signinname -RoleDefinitName $Role -Scope $str $rstype}
+       New-AzRoleAssignment  -objectID $objectID -RoleDefinitName $Role -Scope $scope }
        }
     } 
     
